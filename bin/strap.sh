@@ -300,5 +300,21 @@ if [ -f "$HOME/.Brewfile" ]; then
   logk
 fi
 
+# Run post install script
+if [ -n "$STRAP_GITHUB_USER" ]; then
+  DOTFILES_URL="https://github.com/$STRAP_GITHUB_USER/dotfiles"
+    (
+      cd ~/.dotfiles
+      for i in script/post; do
+        if [ -f "$i" ] && [ -x "$i" ]; then
+          log "Running $i:"
+          "$i" 2>/dev/null
+          break
+        fi
+      done
+    )
+    logk
+fi
+
 STRAP_SUCCESS="1"
 log "Your system is now Strap'd!"
